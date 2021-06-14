@@ -1,0 +1,258 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Calciulator Tool";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Calciulator</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/templatemo-style.css" />
+</head>
+<body>
+    <section id="hero" class="text-white tm-font-big tm-parallax">
+
+        <div class="text-center tm-hero-text-container">
+            <div class="tm-hero-text-container-inner">
+                <h2 class="tm-hero-title">Calciulator</h2>
+                <p class="tm-hero-subtitle">
+                    Creative Protein Solutions Inc.
+                </p>
+            </div>
+        </div>
+
+        <div id="scenarioDropdownDiv" class="tm-next tm-intro-next">
+
+            <label for="scenarioDropdown">Select a Scenario:</label>
+
+            <select name="scenarioDropdown" id="scenarioDropdown" onchange="changeScenario()">
+                <option value="" selected disabed hidden>-</option>
+                <option value="Ration Change Scenario">Ration Change</option>
+                <option value="Bolus Scenario">Bolus</option>
+            </select>
+
+        </div>
+
+    </section>
+
+    <section id="introduction" class="tm-section-pad-top">
+
+        <div class="text-center" id="rationChangeScenarioSliderTool" style="display: none;  background-color: lightblue;" >
+            <div class="preambleText">
+                <b>
+                    This tool was designed to demonstrate how testing can allow farmers to target their treatment and
+                    save money on boluses. By using blanket treatments/being indiscriminate in which cows receive
+                    supplements, farmers are leaving money on the table by treating cows that do not require it.
+                    This tool assumes that the farmer will test all of their cows to determine which ones need boluses and
+                    which do not, thereby allowing them to make informed decisions and save money in the process by
+                    only treating the cows in need.
+                </b>
+            </div>
+            <div>
+                --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            </div>
+            <div id="sliderDiv">
+                <label for="numberOfCowsCalvingSlider">Number of cows calving per year: </label>
+                <div align="center">
+                    <input class="slider" type="range" id="numberOfCowsCalvingSlider" value="0" min="0" max="500" step="10" oninput="">
+                </div>
+                <input value="0" min="0" max="500" onchange="" size="5">
+                <button type="button" id="infoButton1" onclick="">?</button>
+                <br>
+                <br>
+                <label for="costOfAdditivePerkgSlider">Cost of additive per kg ($): </label>
+                <div align="center">
+                    <input class="slider" type="range" id="costOfAdditivePerkgSlider" value="0" min="0" max="1000" step="25" oninput="">
+                </div>
+                <input value="0.00" min="0" max="1000" onchange="" size="5">
+                <button type="button" id="infoButton2" onclick="">?</button>
+                <br>
+                <br>
+                <label for="additionalAdditiveHeadDaySlider">Change in dry cow additive per head per day (g): </label>
+                <div align="center">
+                    <input class="slider" type="range" id="additionalAdditiveHeadDaySlider" value="0" min="0" max="1000" step="25" oninput="">
+                </div>
+                <input value="0" min="0" max="1000" onchange="" size="5">
+                <button type="button" id="infoButton3" onclick="">?</button>
+                <br>
+                <br>
+                <label for="numberOfDaysOnTheRationSlider">Number of days on the ration: </label>
+                <div align="center">
+                    <input class="slider" type="range" id="numberOfDaysOnTheRationSlider" value="0" min="0" max="182" step="2" oninput="">
+                </div>
+                <input value="0" min="0" max="182" onchange="" size="5">
+                <button type="button" id="infoButton4" onclick="">?</button>
+                <br>
+                <br>
+                <label for="prevalenceOfSCHSlider">Prevalence of SCH (%): </label>
+                <div align="center">
+                    <input class="slider" type="range" id="prevalenceOfSCHSlider" value="50" min="0" max="100" oninput="">
+                </div>
+                <input value="50" min="0" max="100" onchange="" size="5">
+                <button type="button" id="infoButton5" onclick="">?</button>
+                <br>
+                <br>
+                <label for="prevalenceOfMFSlider">Prevalence of MF (%): </label>
+                <div align="center">
+                    <input class="slider" type="range" id="prevalenceOfMFSlider" value="2" min="0" max="100" oninput="">
+                </div>
+                <input value="2" min="0" max="100" onchange="" size="5">
+                <button type="button" id="infoButton6" onclick="">?</button>
+                <br>
+                <br>
+                <label for="numberOfCowsTestedSlider">Percentage of cows tested (%): </label>
+                <div align="center">
+                    <input class="slider" type="range" id="numberOfCowsTestedSlider" value="0" min="0" max="100" oninput="">
+                </div>
+                <input value="0" min="0" max="100" onchange="" size="5">
+                <button type="button" id="infoButton7" onclick="">?</button>
+            </div>
+            <div>
+                --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            </div>
+            <div id="buttonDiv">
+                <button type="button" id="calculateCostBenefitButton" onclick="">Calculate Cost Benefit</button>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="button" id="resetDefaultsButton1" onclick="">Reset Default Values</button>
+                <br>
+                <br>
+                <b>Cost Benefit: </b>
+                <b style="color: black">$</b><output id="costBenefitOutput">0.00</output>
+                <br>
+                <br>
+                <b>Cost Benefit Per Cow: </b>
+                <b style="color: black">$</b><output id="costBenefitOutputPerCow">0.00</output>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="text-center" id="bolusScenarioSliderTool" style="display: none; background-color: lightblue;">
+            <div class="preambleText" style="background-color: lightblue;">
+                <b>
+                    This tool was designed to demonstrate the power of knowing your herd's overall health. Testing
+                    is crucial to improving your bottom line. Many farmers are unaware of the highly prevalent
+                    subclinical cases of milk fever that silently impact milk production and lead to other transition
+                    cow diseases. This tool shows that even if you must spend money on feed additives such as
+                    calcium binders or anionic salts, you still win in the long run by saving on the steep costs
+                    associated with milk fever. And all of this is possible thanks to the ability to test and monitor your
+                    herd using CPS rapid on-farm diagnostics.
+                </b>
+            </div>
+            <div>
+                --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            </div>
+            <div id="sliderDiv">
+                <label for="numberOfCowsCalvingSlider2">Number of cows calving per year: </label>
+                <div align="center">
+                    <input class="slider" type="range" id="numberOfCowsCalvingSlider2" value="0" min="0" max="500" step="10" oninput="">
+                </div>
+                <input value="0" min="0" max="500" onchange="" size="5">
+                <button type="button" id="infoButton8" onclick="">?</button>
+                <br>
+                <br>
+                <label for="numberOfHeifersCalvingSlider2">Number of heifers calving per year: </label>
+                <div align="center">
+                    <input class="slider" type="range" id="numberOfHeifersCalvingSlider2" value="0" min="0" max="300" step="10" oninput="">
+                </div>
+                <input value="0" min="0" max="300" onchange="" size="5">
+                <button type="button" id="infoButton9" onclick="">?</button>
+                <br>
+                <br>
+                <label for="costOfBolusPerUnitSlider2">Cost of bolus per unit ($): </label>
+                <div align="center">
+                    <input class="slider" type="range" id="costOfBolusPerUnitSlider2" value="1000" min="0" max="1200" step="25" oninput="">
+                </div>
+                <input value="10.00" min="0" max="1200" onchange="" size="5">
+                <button type="button" id="infoButton10" onclick="">?</button>
+                <br>
+                <br>
+                <label for="numberOfBolusesPerCowSlider2">Number of boluses per cow: </label>
+                <div align="center">
+                    <input class="slider" type="range" id="numberOfBolusesPerCowSlider2" value="0" min="0" max="5" step="1" oninput="">
+                </div>
+                <input value="0" min="0" max="5" onchange="" size="5">
+                <button type="button" id="infoButton11" onclick="">?</button>
+                <br>
+                <br>
+                <label for="numberOfBolusesPerHeiferSlider2">Number of boluses per heifer: </label>
+                <div align="center">
+                    <input class="slider" type="range" id="numberOfBolusesPerHeiferSlider2" value="0" min="0" max="5" step="1" oninput="">
+                </div>
+                <input value="0" min="0" max="5" onchange="" size="5">
+                <button type="button" id="infoButton12" onclick="">?</button>
+                <br>
+                <br>
+                <label for="prevalenceOfCowSCHSlider2">Prevalence of cow SCH (%): </label>
+                <div align="center">
+                    <input class="slider" type="range" id="prevalenceOfCowSCHSlider2" value="50" min="0" max="100" oninput="">
+                </div>
+                <input value="50" min="0" max="100" onchange="" size="5">
+                <button type="button" id="infoButton13" onclick="">?</button>
+                <br>
+                <br>
+                <label for="prevalenceOfCowMFSlider2">Prevalence of cow MF (%): </label>
+                <div align="center">
+                    <input class="slider" type="range" id="prevalenceOfCowMFSlider2" value="5" min="0" max="100" oninput="">
+                </div>
+                <input value="5" min="0" max="100" onchange="" size="5">
+                <button type="button" id="infoButton14" onclick="">?</button>
+                <br>
+                <br>
+                <label for="prevalenceOfHeiferSCHSlider2">Prevalence of heifer SCH (%): </label>
+                <div align="center">
+                    <input class="slider" type="range" id="prevalenceOfHeiferSCHSlider2" value="25" min="0" max="100" oninput="">
+                </div>
+                <input value="25" min="0" max="100" onchange="" size="5">
+                <button type="button" id="infoButton15" onclick="">?</button>
+                <br>
+                <br>
+                <label for="prevalenceOfHeiferMFSlider2">Prevalence of heifer MF (%): </label>
+                <div align="center">
+                    <input class="slider" type="range" id="prevalenceOfHeiferMFSlider2" value="1" min="0" max="100" oninput="">
+                </div>
+                <input value="1" min="0" max="100" onchange="" size="5">
+                <button type="button" id="infoButton16" onclick="">?</button>
+            </div>
+            <div>
+                --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            </div>
+            <div id="buttonDiv">
+                <button type="button" id="calculateCostBenefitButton2" onclick="">Calculate Cost Benefit</button>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="button" id="resetDefaultsButton2" onclick="">Reset Default Values</button>
+                <br>
+                <br>
+                <b>Cost Benefit (Cows): </b>
+                <b style="color: black">$</b><output id="costBenefitOutputCows2">0.00</output>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <b>Savings per Cow by Testing: </b>
+                <b style="color: black">$</b><output id="costBenefitOutputPerCow2">0.00</output>
+                <br>
+                <br>
+                <b>Cost Benefit (Heifers): </b>
+                <b style="color: black">$</b><output id="costBenefitOutputHeifers2">0.00</output>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <b>Savings per Heifer by Testing: </b>
+                <b style="color: black">$</b><output id="heiferBolusSavingsPerTreatment">0.00</output>
+            </div>
+        </div>
+
+    </section>
+</body>
+
+</html>
+
+<script src="~/js/site.js"></script>

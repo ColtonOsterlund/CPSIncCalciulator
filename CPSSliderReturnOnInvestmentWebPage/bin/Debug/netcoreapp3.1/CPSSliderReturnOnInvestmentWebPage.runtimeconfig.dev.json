@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\colto\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\colto\\.nuget\\packages"
+    ]
+  }
+}
